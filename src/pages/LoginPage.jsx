@@ -18,20 +18,29 @@ export default function LoginPage() {
 
         try {
             const response = await axios.get("http://localhost:3001/users", {
-                params: { email, password },
+                params: { email },
             });
 
-            if (response.data.length > 0) {
-                alert(` 로그인 성공! ${response.data[0].name}님 환영합니다.`);
-                navigate("/todo"); // 로그인 성공 시 TodoPage로 이동
-            } else {
-                alert(" 아이디 또는 비밀번호가 잘못되었습니다.");
+            if (response.data.length === 0) {
+                alert("존재하지 않는 아이디입니다.");
+                return;
             }
+
+            const user = response.data[0];
+
+            if (user.password !== password) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return;
+            }
+
+            alert(` 로그인 성공! ${user.name}님 환영합니다.`);
+            navigate("/todo");
         } catch (error) {
             console.error(error);
             alert("서버 오류로 로그인 실패");
         }
     };
+
 
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
