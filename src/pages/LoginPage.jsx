@@ -6,21 +6,26 @@ import Button from "@/components/Button";
 import Text from "@/components/Text";
 
 export default function LoginPage() {
+    // 입력값 상태 관리
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
+    // 로그인 처리
     const handleLogin = async () => {
+        // 입력값 누락 확인
         if (!email || !password) {
             alert("아이디와 비밀번호를 입력하세요.");
             return;
         }
 
         try {
+            //  이메일로 사용자 조회
             const response = await axios.get("http://localhost:3001/users", {
                 params: { email },
             });
 
+            // 아이디 존재 여부 확인
             if (response.data.length === 0) {
                 alert("존재하지 않는 아이디입니다.");
                 return;
@@ -28,16 +33,18 @@ export default function LoginPage() {
 
             const user = response.data[0];
 
+            // 비밀번호 일치 여부 확인
             if (user.password !== password) {
                 alert("비밀번호가 일치하지 않습니다.");
                 return;
             }
 
+            // 로그인 성공 시 쿠키에 유저 정보 저장
             document.cookie = `userEmail=${user.email}; path=/; max-age=3600`;
             document.cookie = `userName=${user.name}; path=/; max-age=3600`;
 
             alert(`로그인 성공! ${user.name}님 환영합니다.`);
-            navigate("/todo");
+            navigate("/todo"); // Todo 페이지로 이동
         } catch (error) {
             console.error(error);
             alert("서버 오류로 로그인 실패");
@@ -51,8 +58,10 @@ export default function LoginPage() {
                     로그인
                 </Text>
 
+                {/* 로그인 폼 영역 */}
                 <div className="flex space-x-2 items-start">
                     <div className="flex flex-col space-y-4 flex-grow">
+                        {/* 아이디 입력 */}
                         <div className="flex items-center space-x-2">
                             <label className="w-12 text-sm font-bold text-gray-800">
                                 아이디
@@ -65,6 +74,7 @@ export default function LoginPage() {
                             />
                         </div>
 
+                        {/* 비밀번호 입력 */}
                         <div className="flex items-center space-x-2">
                             <label className="w-13 text-sm font-bold text-gray-800">
                                 비밀번호
@@ -79,6 +89,7 @@ export default function LoginPage() {
                         </div>
                     </div>
 
+                    {/* 로그인 버튼 */}
                     <Button
                         variant="primary"
                         className="w-[100px] h-[100px] mt-0"
@@ -88,6 +99,7 @@ export default function LoginPage() {
                     </Button>
                 </div>
 
+                {/* 회원가입 페이지 이동 */}
                 <Text
                     as="button"
                     onClick={() => navigate("/signup")}

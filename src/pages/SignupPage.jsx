@@ -6,19 +6,22 @@ import Button from "@/components/Button";
 import Text from "@/components/Text";
 
 export default function SignupPage() {
+    // 입력값 상태 관리
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
+    // 회원가입 처리
     const handleSignup = async () => {
+        // 입력값 누락 시 경고
         if (!name || !email || !password) {
             alert("모든 항목을 입력하세요.");
             return;
         }
 
         try {
-
+            //   이메일 중복 여부 확인
             const check = await axios.get("http://localhost:3001/users", {
                 params: { email },
             });
@@ -28,6 +31,7 @@ export default function SignupPage() {
                 return;
             }
 
+            //  새로운 사용자 등록
             await axios.post("http://localhost:3001/users", {
                 name,
                 email,
@@ -35,7 +39,7 @@ export default function SignupPage() {
             });
 
             alert(" 회원가입 성공! 로그인 페이지로 이동합니다.");
-            navigate("/login");
+            navigate("/login"); // 로그인 페이지로 이동
         } catch (error) {
             console.error(error);
             alert("회원가입 중 오류가 발생했습니다.");
@@ -49,7 +53,9 @@ export default function SignupPage() {
                     회원가입
                 </Text>
 
+                {/* 입력 폼 영역 */}
                 <div className="space-y-4">
+                    {/* 이름 */}
                     <div className="flex items-center space-x-2">
                         <label className="w-20 text-sm font-bold text-gray-800">이름</label>
                         <Input
@@ -60,6 +66,7 @@ export default function SignupPage() {
                         />
                     </div>
 
+                    {/* 이메일 */}
                     <div className="flex items-center space-x-2">
                         <label className="w-20 text-sm font-bold text-gray-800">아이디</label>
                         <Input
@@ -70,6 +77,7 @@ export default function SignupPage() {
                         />
                     </div>
 
+                    {/* 비밀번호 */}
                     <div className="flex items-center space-x-2">
                         <label className="w-20 text-sm font-bold text-gray-800">비밀번호</label>
                         <Input
@@ -82,6 +90,7 @@ export default function SignupPage() {
                     </div>
                 </div>
 
+                {/* 회원가입 버튼 */}
                 <Button
                     variant="primary"
                     className="w-40 py-2 text-sm font-medium mt-6 block mx-auto rounded-md"
