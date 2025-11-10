@@ -33,14 +33,16 @@ export default function LoginPage() {
                 return;
             }
 
-            alert(` 로그인 성공! ${user.name}님 환영합니다.`);
+            document.cookie = `userEmail=${user.email}; path=/; max-age=3600`;
+            document.cookie = `userName=${user.name}; path=/; max-age=3600`;
+
+            alert(`로그인 성공! ${user.name}님 환영합니다.`);
             navigate("/todo");
         } catch (error) {
             console.error(error);
             alert("서버 오류로 로그인 실패");
         }
     };
-
 
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
