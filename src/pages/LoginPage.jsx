@@ -11,6 +11,11 @@ export default function LoginPage() {
     const navigate = useNavigate();
 
     const handleLogin = async () => {
+        if (!email || !password) {
+            alert("아이디와 비밀번호를 입력하세요.");
+            return;
+        }
+
         try {
             const response = await axios.get("http://localhost:3001/users", {
                 params: { email, password },
@@ -18,8 +23,7 @@ export default function LoginPage() {
 
             if (response.data.length > 0) {
                 alert(` 로그인 성공! ${response.data[0].name}님 환영합니다.`);
-                // 로그인 성공 시 Todo 페이지로 이동
-                navigate("/todo");
+                navigate("/todo"); // 로그인 성공 시 TodoPage로 이동
             } else {
                 alert(" 아이디 또는 비밀번호가 잘못되었습니다.");
             }
@@ -39,7 +43,9 @@ export default function LoginPage() {
                 <div className="flex space-x-2 items-start">
                     <div className="flex flex-col space-y-4 flex-grow">
                         <div className="flex items-center space-x-2">
-                            <label className="w-12 text-sm font-bold text-gray-800">아이디</label>
+                            <label className="w-12 text-sm font-bold text-gray-800">
+                                아이디
+                            </label>
                             <Input
                                 className="flex-1 border border-gray-400 rounded-md px-2 py-2 text-sm"
                                 placeholder="아이디 입력"
@@ -49,7 +55,9 @@ export default function LoginPage() {
                         </div>
 
                         <div className="flex items-center space-x-2">
-                            <label className="w-13 text-sm font-bold text-gray-800">비밀번호</label>
+                            <label className="w-13 text-sm font-bold text-gray-800">
+                                비밀번호
+                            </label>
                             <Input
                                 className="flex-1 border border-gray-400 rounded-md px-2 py-2 text-sm"
                                 type="password"
