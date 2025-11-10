@@ -18,7 +18,16 @@ export default function SignupPage() {
         }
 
         try {
-            // 회원정보 등록
+
+            const check = await axios.get("http://localhost:3001/users", {
+                params: { email },
+            });
+
+            if (check.data.length > 0) {
+                alert("회원가입 실패.\n이미 존재하는 아이디(이메일)입니다.");
+                return;
+            }
+
             await axios.post("http://localhost:3001/users", {
                 name,
                 email,
@@ -26,11 +35,10 @@ export default function SignupPage() {
             });
 
             alert(" 회원가입 성공! 로그인 페이지로 이동합니다.");
-            //  로그인 페이지로 이동
             navigate("/login");
         } catch (error) {
             console.error(error);
-            alert(" 회원가입 실패");
+            alert("회원가입 중 오류가 발생했습니다.");
         }
     };
 
@@ -56,7 +64,7 @@ export default function SignupPage() {
                         <label className="w-20 text-sm font-bold text-gray-800">아이디</label>
                         <Input
                             className="flex-1 border border-gray-400 rounded-xl px-2 py-2 text-sm"
-                            placeholder="아이디 입력"
+                            placeholder="아이디 입력 (이메일 형식)"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
